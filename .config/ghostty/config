@@ -1,0 +1,17 @@
+theme = One Double Dark
+font-family = BlexMono Nerd Font
+font-size = 13.5
+background-opacity = 1
+background-blur = 0
+cursor-style = block
+cursor-style-blink = false
+mouse-hide-while-typing = true
+macos-titlebar-style = tabs
+working-directory = home
+window-inherit-working-directory = false
+
+window-save-state = always
+window-padding-balance = true 
+
+keybind = shift+enter=text:\n
+macos-option-as-alt = true

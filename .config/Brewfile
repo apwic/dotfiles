@@ -1,7 +1,6 @@
 tap "farion1231/ccswitch"
 tap "felixkratz/formulae"
 tap "hashicorp/tap"
-tap "homebrew/services"
 tap "jstkdng/programs"
 tap "manaflow-ai/cmux"
 tap "nikitabobko/tap"

@@ -7,3 +7,6 @@ github = "zsh-users/zsh-autosuggestions"
 
 [plugins.syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
+
+[plugins.zoxide]
+inline = 'eval "$(zoxide init zsh)"'

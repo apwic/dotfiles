@@ -116,7 +116,7 @@ outer.top = 5
 outer.right = 10
 
 [workspace-to-monitor-force-assignment]
-O = 'secondary'
+0 = 'secondary'
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -180,6 +180,7 @@ cmd-ctrl-shift-equal = 'resize smart +50'
 # N: Notes (Notion)
 # O: OrbStack
 # S: System (Settings, Terminal, Finder)
+cmd-ctrl-0 = 'workspace 0'
 cmd-ctrl-1 = 'workspace 1'
 cmd-ctrl-2 = 'workspace 2'
 cmd-ctrl-3 = 'workspace 3'
@@ -193,6 +194,7 @@ cmd-ctrl-o = 'workspace O'
 cmd-ctrl-s = 'workspace S'
 
 # Move window to workspace
+cmd-ctrl-shift-0 = 'move-node-to-workspace 0 --focus-follows-window'
 cmd-ctrl-shift-1 = 'move-node-to-workspace 1 --focus-follows-window'
 cmd-ctrl-shift-2 = 'move-node-to-workspace 2 --focus-follows-window'
 cmd-ctrl-shift-3 = 'move-node-to-workspace 3 --focus-follows-window'

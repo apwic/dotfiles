@@ -72,10 +72,10 @@ run = 'move-node-to-workspace M'
 if.app-name-regex-substring = 'Notion'
 run = 'move-node-to-workspace N'
 
-# O - OrbStack
+# V - Virtualization (OrbStack)
 [[on-window-detected]]
 if.app-name-regex-substring = 'OrbStack'
-run = 'move-node-to-workspace O'
+run = 'move-node-to-workspace V'
 
 # S - System
 [[on-window-detected]]
@@ -178,7 +178,7 @@ cmd-ctrl-shift-equal = 'resize smart +50'
 # D: Database (DataGrip)
 # M: Message (Slack)
 # N: Notes (Notion)
-# O: OrbStack
+# V: Virtualization (OrbStack)
 # S: System (Settings, Terminal, Finder)
 cmd-ctrl-0 = 'workspace 0'
 cmd-ctrl-1 = 'workspace 1'
@@ -190,7 +190,7 @@ cmd-ctrl-c = 'workspace C'
 cmd-ctrl-d = 'workspace D'
 cmd-ctrl-m = 'workspace M'
 cmd-ctrl-n = 'workspace N'
-cmd-ctrl-o = 'workspace O'
+cmd-ctrl-v = 'workspace V'
 cmd-ctrl-s = 'workspace S'
 
 # Move window to workspace
@@ -204,7 +204,7 @@ cmd-ctrl-shift-c = 'move-node-to-workspace C --focus-follows-window'
 cmd-ctrl-shift-d = 'move-node-to-workspace D --focus-follows-window'
 cmd-ctrl-shift-m = 'move-node-to-workspace M --focus-follows-window'
 cmd-ctrl-shift-n = 'move-node-to-workspace N --focus-follows-window'
-cmd-ctrl-shift-o = 'move-node-to-workspace O --focus-follows-window'
+cmd-ctrl-shift-v = 'move-node-to-workspace V --focus-follows-window'
 cmd-ctrl-shift-s = 'move-node-to-workspace S --focus-follows-window'
 
 cmd-ctrl-tab = 'workspace-back-and-forth'

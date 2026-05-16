@@ -88,7 +88,7 @@ run = ['layout floating', 'move-node-to-workspace S']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Finder'
-run = ['layout floating', 'move-node-to-workspace S']
+run = 'layout floating'
 
 # Spotify stays floating, no workspace assignment
 [[on-window-detected]]
@@ -212,6 +212,7 @@ cmd-ctrl-shift-tab = 'move-workspace-to-monitor --wrap-around next'
 
 # See: https://nikitabobko.github.io/AeroSpace/commands#mode
 cmd-ctrl-shift-semicolon = 'mode service'
+cmd-ctrl-g = 'mode summon'
 
 # cmd-ctrl-f = "macos-native-fullscreen"
 # cmd-ctrl-m = "macos-native-minimize"
@@ -235,3 +236,20 @@ cmd-ctrl-shift-l = ['join-with right', 'mode main']
 down = 'volume down'
 up = 'volume up'
 shift-down = ['volume set 0', 'mode main']
+
+# 'summon' binding mode - pull app windows to current workspace
+# Usage: cmd-ctrl-g then a letter to summon that app
+[mode.summon.binding]
+esc = 'mode main'
+f = ['''exec-and-forget
+FOCUSED=$(aerospace list-workspaces --focused)
+WIDS=$(aerospace list-windows --monitor all --format '%{window-id} %{app-name}' | grep Finder | awk '{print $1}')
+if [ -z "$WIDS" ]; then
+  open -a Finder
+else
+  for wid in $WIDS; do
+    aerospace move-node-to-workspace --window-id "$wid" "$FOCUSED"
+  done
+  aerospace focus --window-id "$(echo "$WIDS" | head -1)"
+fi
+''', 'mode main']

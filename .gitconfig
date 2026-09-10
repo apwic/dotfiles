@@ -1,0 +1,20 @@
+[user]
+	name = apwic
+	email = adiyansawicaksana@gmail.com
+
+[credential]
+	helper =
+	helper = /usr/local/share/gcm-core/git-credential-manager
+[credential "https://dev.azure.com"]
+	useHttpPath = true
+[url "ssh://git@gitlab.com/"]
+	insteadOf = https://gitlab.com/
+
+[includeIf "gitdir:~/Stockbit/"]
+	path = ~/.gitconfig-work
+[push]
+	autoSetupRemote = true
+[pull]
+	rebase = true
+[init]
+	templateDir = /Users/adiyansawicaksana/.git-template

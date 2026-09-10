@@ -1,0 +1,38 @@
+{
+  "$schema" : "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion" : 1,
+  "shortcuts" : {
+    "bindings" : {
+      "newWorkspaceGroup" : {
+        "first" : {
+          "command" : false,
+          "control" : true,
+          "key" : "g",
+          "keyCode" : 5,
+          "option" : false,
+          "shift" : true
+        }
+      },
+      "selectSurfaceByNumber" : {
+        "first" : {
+          "command" : true,
+          "control" : false,
+          "key" : "1",
+          "keyCode" : 18,
+          "option" : false,
+          "shift" : false
+        }
+      },
+      "selectWorkspaceByNumber" : {
+        "first" : {
+          "command" : false,
+          "control" : true,
+          "key" : "1",
+          "keyCode" : 18,
+          "option" : false,
+          "shift" : false
+        }
+      }
+    }
+  }
+}

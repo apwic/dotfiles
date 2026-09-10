@@ -1,0 +1,4 @@
+# nvm-installed node versions
+v22.23.0
+# active
+v25.8.2

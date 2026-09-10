@@ -72,6 +72,19 @@ run = 'move-node-to-workspace M'
 if.app-name-regex-substring = 'Notion'
 run = 'move-node-to-workspace N'
 
+[[on-window-detected]]
+if.app-name-regex-substring = 'Obsidian'
+run = 'move-node-to-workspace N'
+
+# P - API (Bruno/Postman)
+[[on-window-detected]]
+if.app-name-regex-substring = 'Bruno'
+run = 'move-node-to-workspace P'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Postman'
+run = 'move-node-to-workspace P'
+
 # V - Virtualization (OrbStack)
 [[on-window-detected]]
 if.app-name-regex-substring = 'OrbStack'
@@ -93,6 +106,10 @@ run = 'layout floating'
 # Spotify stays floating, no workspace assignment
 [[on-window-detected]]
 if.app-name-regex-substring = 'Spotify'
+run = 'layout floating'
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Numi'
 run = 'layout floating'
 
 # Possible values: (qwerty|dvorak)
@@ -177,7 +194,8 @@ cmd-ctrl-shift-equal = 'resize smart +50'
 # C: Code (cmux)
 # D: Database (DataGrip)
 # M: Message (Slack)
-# N: Notes (Notion)
+# N: Notes (Notion, Obsidian)
+# P: API (Bruno/Postman)
 # V: Virtualization (OrbStack)
 # S: System (Settings, Terminal, Finder)
 cmd-ctrl-0 = 'workspace 0'
@@ -190,6 +208,7 @@ cmd-ctrl-c = 'workspace C'
 cmd-ctrl-d = 'workspace D'
 cmd-ctrl-m = 'workspace M'
 cmd-ctrl-n = 'workspace N'
+cmd-ctrl-p = 'workspace P'
 cmd-ctrl-v = 'workspace V'
 cmd-ctrl-s = 'workspace S'
 
@@ -204,6 +223,7 @@ cmd-ctrl-shift-c = 'move-node-to-workspace C --focus-follows-window'
 cmd-ctrl-shift-d = 'move-node-to-workspace D --focus-follows-window'
 cmd-ctrl-shift-m = 'move-node-to-workspace M --focus-follows-window'
 cmd-ctrl-shift-n = 'move-node-to-workspace N --focus-follows-window'
+cmd-ctrl-shift-p = 'move-node-to-workspace P --focus-follows-window'
 cmd-ctrl-shift-v = 'move-node-to-workspace V --focus-follows-window'
 cmd-ctrl-shift-s = 'move-node-to-workspace S --focus-follows-window'
 

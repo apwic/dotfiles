@@ -1,0 +1,21 @@
+[pre-start]
+link-local-config = """
+src={{ primary_worktree_path }}/config.jsonc
+if [ -e "$src" ] && [ ! -e config.jsonc ] && [ ! -L config.jsonc ]; then
+  ln -s "$src" config.jsonc
+fi
+"""
+link-tilt-state = """
+primary={{ primary_worktree_path }}
+# Only link .tiltenv: it's pure config (DB creds + pinned service versions),
+# read by dotenv() and never COPY'd into a Docker image, so a symlink is safe.
+#
+# NOTE: do NOT link .tilt/*/.deps. Those are build inputs that get COPY'd into
+# images (e.g. infrastructure/rpconsole.Dockerfile). A symlink escapes the
+# Docker build context and BuildKit rejects it, and which sub-paths must be
+# real is branch-dependent. Let Tilt populate .deps per-worktree via its own
+# git_checkout/buf export guards instead. Tilt's real state lives in Docker.
+if [ -e "$primary/.tilt/.tiltenv" ] && [ ! -e .tilt/.tiltenv ]; then
+  ln -s "$primary/.tilt/.tiltenv" .tilt/.tiltenv
+fi
+"""

@@ -15,3 +15,6 @@ window-padding-balance = true
 
 keybind = shift+enter=text:\n
 macos-option-as-alt = true
+
+keybind = ctrl+alt+u=scroll_page_fractional:-0.5
+keybind = ctrl+alt+d=scroll_page_fractional:0.5

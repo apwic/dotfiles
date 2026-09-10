@@ -1,3 +1,7 @@
+# Public template. The live ~/.zshrc additionally carries a
+# machine-managed sandbox-shell hook, and sources
+# ~/.config/zsh/work.zsh for work-only aliases and hosts.
+
 # -------------------------------
 # 0. Dotfiles (bare repo)
 # -------------------------------
@@ -25,6 +29,7 @@ setopt appendhistory
 setopt sharehistory
 setopt hist_ignore_dups
 setopt hist_ignore_space
+setopt ignore_eof
 
 # -------------------------------
 # 4. Completion
@@ -67,3 +72,26 @@ command -v starship >/dev/null && eval "$(starship init zsh)"
 alias ll="ls -lah"
 alias cfg="cd ~/.config/"
 
+source "$HOME/.config/zsh/review-worktree.zsh"
+[ -f ~/.config/zsh/work.zsh ] && source ~/.config/zsh/work.zsh
+
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
+
+# -------------------------------
+# 10. Terminal tab title = last cwd component
+# (overrides Ghostty/cmux shell-integration's command-name title)
+# -------------------------------
+# Ghostty/cmux's shell integration installs its own title hooks lazily (on the
+# first prompt), which would run after ours. Drop just the `title` feature and
+# keep the rest (cursor, path).
+if [[ -n "$GHOSTTY_SHELL_FEATURES" ]]; then
+  export GHOSTTY_SHELL_FEATURES="${${GHOSTTY_SHELL_FEATURES//title/}//,,/,}"
+  GHOSTTY_SHELL_FEATURES="${GHOSTTY_SHELL_FEATURES%,}"
+  GHOSTTY_SHELL_FEATURES="${GHOSTTY_SHELL_FEATURES#,}"
+fi
+
+_cmux_title() { print -Pn '\e]2;%1~\a' }
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd  _cmux_title
+add-zsh-hook preexec _cmux_title
+add-zsh-hook chpwd   _cmux_title

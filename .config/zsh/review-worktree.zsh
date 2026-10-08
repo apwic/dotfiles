@@ -71,16 +71,19 @@ _review_entry_matches() {
     [[ "${branch:t}" == "$safe_input" ]]
 }
 
+# Main repos only: `-type d` skips linked worktrees (their .git is a file), and
+# -maxdepth keeps the scan out of deep trees like .tilt/.deps clones.
 _review_repo_paths() {
   emulate -L zsh
   local workspace="$1"
 
-  find "$workspace" \
-    -path "$workspace/.git" -prune -o \
-    -path "$workspace/.reviews" -prune -o \
-    -path "$workspace/notes" -prune -o \
-    -path "$workspace/logs" -prune -o \
-    -name .git -print 2>/dev/null |
+  find "$workspace" -maxdepth 5 \
+    \( -path "$workspace/.git" -o \
+       -path "$workspace/.reviews" -o \
+       -path "$workspace/notes" -o \
+       -path "$workspace/logs" -o \
+       -name node_modules -o -name vendor -o -name .tilt \) -prune -o \
+    -type d -name .git -print -prune 2>/dev/null |
     while IFS= read -r git_marker; do
       local repo="${git_marker:h}"
       [[ "$repo" == "$workspace" ]] && continue
@@ -195,46 +198,17 @@ _review_pick_branch() {
   print -r -- "$selected"
 }
 
+# Lists worktrees under $workspace/.reviews as "repo_rel<TAB>branch<TAB>path".
+# The owning repo comes from each worktree's git common dir, so no repo scan.
 _review_active_worktrees() {
   emulate -L zsh
   local workspace="$1"
-  local repo
+  local worktree_path common_dir branch
 
-  _review_repo_paths "$workspace" | while IFS= read -r repo; do
-    local repo_rel="${repo#$workspace/}"
-    git -C "$repo" worktree list --porcelain 2>/dev/null |
-      awk -v workspace="$workspace" -v repo_rel="$repo_rel" '
-        function flush() {
-          if (path != "" && index(path, workspace "/.reviews/") == 1) {
-            if (branch == "") {
-              branch = "unknown"
-            }
-            print repo_rel "\t" branch "\t" path
-          }
-          path = ""
-          branch = ""
-        }
-        /^worktree / {
-          flush()
-          path = substr($0, 10)
-          next
-        }
-        /^branch refs\/heads\// {
-          branch = substr($0, 19)
-          next
-        }
-        /^detached$/ {
-          branch = "(detached)"
-          next
-        }
-        /^$/ {
-          flush()
-          next
-        }
-        END {
-          flush()
-        }
-      '
+  for worktree_path in "$workspace/.reviews"/*(N/); do
+    common_dir="$(git -C "$worktree_path" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || continue
+    branch="$(git -C "$worktree_path" branch --show-current 2>/dev/null)"
+    print -r -- "${${common_dir:h}#$workspace/}"$'\t'"${branch:-(detached)}"$'\t'"$worktree_path"
   done
 }
 
@@ -365,19 +339,13 @@ review-done() {
     return 1
   }
 
-  local owning_repo=""
-  local repo
-  while IFS= read -r repo; do
-    if git -C "$repo" worktree list --porcelain 2>/dev/null | grep -qxF "worktree $selected_path"; then
-      owning_repo="$repo"
-      break
-    fi
-  done < <(_review_repo_paths "$workspace")
-
-  [[ -n "$owning_repo" ]] || {
+  local owning_repo
+  owning_repo="$(git -C "$selected_path" rev-parse --path-format=absolute --git-common-dir 2>/dev/null)" || {
     print -u2 -- "review-done: could not find owning repo for worktree: $selected_path"
     return 1
   }
+
+  owning_repo="${owning_repo:h}"
 
   print -- "review-done: removing worktree: $selected_path"
   git -C "$owning_repo" worktree remove --force "$selected_path" || return 1
@@ -485,23 +453,6 @@ review-continue() {
   }
 
   local repo="$workspace/$selected_repo_rel"
-  if ! git -C "$repo" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
-    repo=""
-    local candidate_repo
-    while IFS= read -r candidate_repo; do
-      if git -C "$candidate_repo" worktree list --porcelain 2>/dev/null | grep -qxF "worktree $selected_path"; then
-        repo="$candidate_repo"
-        selected_repo_rel="${candidate_repo#$workspace/}"
-        break
-      fi
-    done < <(_review_repo_paths "$workspace")
-
-    [[ -n "$repo" ]] || {
-      print -u2 -- "review-continue: original repo not found: $selected_repo_rel"
-      return 1
-    }
-  fi
-
   local default_branch
   default_branch="$(_review_default_branch "$repo")" || return 1
 
